@@ -2,7 +2,6 @@ import type { Move, Square } from 'chess.js';
 import React, { useCallback, useImperativeHandle } from 'react';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, {
-  Value,
   runOnJS,
   useAnimatedStyle,
   useDerivedValue,
@@ -58,7 +57,6 @@ const Piece = React.memo(
       const offsetY = useSharedValue(0);
       const scale = useSharedValue(1);
 
-      // console.log(id, startPosition.x, startPosition.y)
       const translateX = useSharedValue(startPosition.x * size);
       const translateY = useSharedValue(startPosition.y * size);
 
@@ -82,7 +80,6 @@ const Piece = React.memo(
         (from: Square, to: Square) => {
           return new Promise<Move | undefined>((resolve) => {
             const move = validateMove(from, to);
-            // console.log(from, move ? move.to : "Null...");
             const { x, y } = toTranslation(move ? move.to : from);
             translateX.value = withTiming(x, { duration: moveDuration }, () => {
               offsetX.value = translateX.value;
@@ -95,7 +92,6 @@ const Piece = React.memo(
                 offsetY.value = translateY.value;
                 isGestureActive.value = false;
                 
-            // console.log(offsetX.value, offsetY.value);
                 if (move) {
                   runOnJS(wrappedOnMoveForJSThread)({ move });
                   // Ideally I must call the resolve method
@@ -172,9 +168,6 @@ const Piece = React.memo(
           y: translateY.value,
         });
 
-        //console.log(currentSquare)
-        // console.log(id, startPosition.x, startPosition.y, translateX.value, translateY.value)
-
         const previousTappedSquare = selectedSquare.value;
         const move =
           previousTappedSquare &&
@@ -227,7 +220,6 @@ const Piece = React.memo(
         });
 
       const style = useAnimatedStyle(() => {
-        //console.log(id, startPosition.x, startPosition.y, translateX.value, translateY.value)
         return {
           position: 'absolute',
           opacity: withTiming(pieceEnabled.value ? 1 : 0),
