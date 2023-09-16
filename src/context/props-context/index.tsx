@@ -62,6 +62,10 @@ type ChessboardProps = {
    * Useful if you want to customise the default durations used in the chessboard (in milliseconds).
    */
   durations?: ChessboardDurationsType;
+  /**
+   * Flip the board to play from the other side
+   */
+  flipped?: boolean
 };
 
 type ChessboardContextType = ChessboardProps &
@@ -94,6 +98,7 @@ const defaultChessboardProps: ChessboardContextType = {
   withNumbers: true,
   boardSize: DEFAULT_BOARD_SIZE,
   pieceSize: DEFAULT_BOARD_SIZE / 8,
+  flipped: false,
 };
 
 const ChessboardPropsContext = React.createContext<ChessboardContextType>(

@@ -10,8 +10,10 @@ import { useReversePiecePosition } from '../notation';
 const Pieces = React.memo(() => {
   const board = useBoard();
   const refs = usePieceRefs();
-  const { pieceSize } = useChessboardProps();
+  const { pieceSize, flipped } = useChessboardProps();
   const { toPosition } = useReversePiecePosition();
+
+
 
   return (
     <>
@@ -19,16 +21,16 @@ const Pieces = React.memo(() => {
         row.map((piece, x) => {
           if (piece !== null) {
             const square = toPosition({
-              x: x * pieceSize,
-              y: y * pieceSize,
+              x: (flipped ? 7- x : x ) * pieceSize,
+              y: (flipped ? 7 - y : y ) * pieceSize,
             });
 
             return (
               <Piece
                 ref={refs?.current?.[square]}
-                key={`${x}-${y}`}
+                key={`${flipped ? 7- x : x}-${flipped ? 7 - y : y}`}
                 id={`${piece.color}${piece.type}` as const}
-                startPosition={{ x, y }}
+                startPosition={flipped ? {x: 7 - x, y: 7 - y} : { x, y }}
                 square={square}
                 size={pieceSize}
               />

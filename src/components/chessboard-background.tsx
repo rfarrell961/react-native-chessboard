@@ -13,6 +13,7 @@ const styles = StyleSheet.create({
 type BackgroundProps = {
   letters: boolean;
   numbers: boolean;
+  flipped?: boolean;
 };
 
 interface BaseProps extends BackgroundProps {
@@ -28,7 +29,7 @@ interface SquareProps extends RowProps {
 }
 
 const Square = React.memo(
-  ({ white, row, col, letters, numbers }: SquareProps) => {
+  ({ white, row, col, letters, numbers, flipped }: SquareProps) => {
     const { colors } = useChessboardProps();
     const backgroundColor = white ? colors.black : colors.white;
     const color = white ? colors.white : colors.black;
@@ -45,12 +46,12 @@ const Square = React.memo(
       >
         {numbers && (
           <Text style={[textStyle, { opacity: newLocal ? 1 : 0 }]}>
-            {'' + (8 - row)}
+            {'' + (flipped ? row + 1 : 8 - row)}
           </Text>
         )}
         {row === 7 && letters && (
           <Text style={[textStyle, { alignSelf: 'flex-end' }]}>
-            {String.fromCharCode(97 + col)}
+            {flipped ? String.fromCharCode(104 - col) : String.fromCharCode(97 + col)}
           </Text>
         )}
       </View>
@@ -58,7 +59,7 @@ const Square = React.memo(
   }
 );
 
-const Row = React.memo(({ white, row, ...rest }: RowProps) => {
+const Row = React.memo(({ white, row, flipped, ...rest }: RowProps) => {
   const offset = white ? 0 : 1;
   return (
     <View style={styles.container}>
@@ -69,6 +70,7 @@ const Row = React.memo(({ white, row, ...rest }: RowProps) => {
           col={i}
           key={i}
           white={(i + offset) % 2 === 1}
+          flipped={flipped}
         />
       ))}
     </View>
@@ -76,7 +78,7 @@ const Row = React.memo(({ white, row, ...rest }: RowProps) => {
 });
 
 const Background: React.FC = React.memo(() => {
-  const { withLetters, withNumbers } = useChessboardProps();
+  const { withLetters, withNumbers, flipped } = useChessboardProps();
   return (
     <View style={{ flex: 1 }}>
       {new Array(8).fill(0).map((_, i) => (
@@ -86,6 +88,7 @@ const Background: React.FC = React.memo(() => {
           row={i}
           letters={withLetters}
           numbers={withNumbers}
+          flipped={flipped}
         />
       ))}
     </View>

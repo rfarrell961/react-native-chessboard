@@ -1,10 +1,11 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, Button, Text } from 'react-native';
 import Chessboard, { ChessboardRef } from 'react-native-chessboard';
 
 export default function App() {
   const ref = useRef<ChessboardRef>(null);
+  const [flipped, setFlipped] = useState(true);
 
   useEffect(() => {
     (async () => {
@@ -28,7 +29,10 @@ export default function App() {
             console.log('Life goes on.');
           }
         }}
+        flipped={flipped}
       />
+      <Button title='flip' onPress={() => setFlipped(!flipped)}/>
+      <Text style={{color: "white"}}>{flipped.toString()}</Text>
     </View>
   );
 }
